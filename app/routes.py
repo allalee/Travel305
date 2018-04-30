@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request, json, jsonify
 from app import app
-from app.forms import LoginForm, SignupForm, GroupNavForm
+from app.forms import LoginForm, SignupForm, GroupNavForm, CreateGroup
 import flask_login
 import pymysql.cursors
 
@@ -95,5 +95,20 @@ def groupHome():
     username = flask_login.current_user.get_id()
     if form.is_submitted():
         if 'createGroup' in request.form:
-            print("Y")
+            return redirect(url_for("createGroup"))
+        if 'joinGroup' in request.form:
+            pass
     return render_template('grouphome.html', name = username, form = form)
+
+@app.route('/creategroup', methods=['GET','POST'])
+def createGroup():
+    form = CreateGroup()
+    username = flask_login.current_user.get_id()
+    if form.validate_on_submit():
+        print("H")
+    return render_template('creategroup.html', name = username, form = form)
+
+@app.route('/joingroup', methods=['GET','POST'])
+def joinGroup():
+    username = flask_login.current_user.get_id()
+    return render_template('joingroup.html', name = username, form = form)

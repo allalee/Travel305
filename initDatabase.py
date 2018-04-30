@@ -59,7 +59,7 @@ initTransportationTable = "CREATE TABLE Transportation (TransportationID int,"\
 "ClassType varchar(255),"\
 "primary key (TransportationID));"
 
-initGroupTable = "CREATE TABLE `Group` (GroupID int,"\
+initGroupTable = "CREATE TABLE `Group` (GroupID int auto_increment,"\
 "TravelID int,"\
 "`GroupSize` int,"\
 "SourceLocation int,"\

@@ -94,5 +94,6 @@ def groupHome():
     form = GroupNavForm()
     username = flask_login.current_user.get_id()
     if form.is_submitted():
-        print("Hello")
+        if 'createGroup' in request.form:
+            print("Y")
     return render_template('grouphome.html', name = username, form = form)

@@ -1,0 +1,14 @@
+{% extends "base_loggedin.html" %}
+
+{% block content %}
+<div class="jumbotron jumbotron-location text-center">
+	<h1>Welcome to grouping. Create your own group or join one for your trip.</h1>
+	<p>Grouping is the simplest way to book trips from location to location with friends and workers!</p>
+</div>
+<form action="" method="post">
+	<ul style="text-align:center; list-style-position:inside;list-style-type:none;">
+  		<li><img src="../static/images/groupvaca.jpg" width="700" height="533"><img src="../static/images/student_group.jpg" width="700" height="533"></li>
+  		<li>{{form.createGroup}}{{form.joinGroup}}</li>
+	</ul>  
+</form>
+{% endblock %}

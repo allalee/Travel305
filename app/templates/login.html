@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+<div class="jumbotron jumbotron-location text-center">
+  <h1>Let's get to booking!</h1>
+  <p>If you don't have an account, <a href="{{ url_for('signup')}}">sign up</a> here.</p>
+</div>
+<div class="container-fluid container-bg" id="login-background">
+  <div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+      <div class="card card-padding card-custom-size">
+        <img class="card-img-top" src="../static/images/user.png" alt="User Avatar">
+        <div class="card-body">
+          <h3 class="card-title">Log In</h3>
+          <form action="" method="post", class="form-horizontal">
+            {{ form.hidden_tag() }}
+            <p class="card-text">
+              {{wtf.form_field(form.email,class="form-control")}}
+            </p>
+            <p class="card-text">
+              {{wtf.form_field(form.password,class="form-control")}}
+            </p>
+            <p>{{wtf.form_field(form.submit,class="btn btn-purple")}}</p>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4 my-auto"></div>
+  </div>
+</div>
+{% endblock %}

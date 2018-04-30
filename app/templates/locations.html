@@ -1,0 +1,26 @@
+{% extends base_template %}
+
+{% block content %}
+<div class="jumbotron jumbotron-location text-center">
+  <h1>Check out some locations we offer!</h1>
+  <p>If you are interested in a location, <a href="{{ url_for('signup')}}">sign up</a> or <a href="{{ url_for('login')}}">login</a> to plan your trip.</p>
+</div>
+<div class="container-fluid container-bg">
+{% for locations_batched in locations|batch(4) %}
+<div class="row">
+   {% for location in locations_batched %}
+  <div class="col-sm-3">
+    <div class="card card-padding">
+      <img class="card-img-top" src="../static/images/{{ location["ImgDir"] }}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">{{ location["CityName"] }}, {{ location["State"]}}</h5>
+        <p class="card-text">List cost of flights here</p>
+        <a href="#" class="btn btn-primary btn-purple">Find Flights</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endfor %}
+</div>
+{% endblock %}

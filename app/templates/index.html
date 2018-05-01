@@ -8,9 +8,13 @@
     <a href='{{ url_for('signup')}}'>sign up</a> or <a href='{{ url_for('signup')}}'>log in</a>.</p>
 </div>
 <div class="container-fluid container-bg">
-{% for locations_batched in locations|batch(4) %}
 <div class="row">
-   {% for location in locations_batched %}
+  <div class="col-sm-12 text-center">
+    <h2>Locations</h2>
+  </div>
+</div>
+<div class="row">
+{% for location in locations %}
   <div class="col-sm-3">
     <div class="card card-padding">
       <img class="card-img-top" src="../static/images/{{ location["ImgDir"] }}" alt="Card image cap">
@@ -23,7 +27,44 @@
   </div>
   {% endfor %}
 </div>
-{% endfor %}
+<div class="row">
+  <div class="col-sm-12 text-center">
+    <h2>Cruises</h2>
+  </div>
+</div>
+<div class="row">
+{% for cruise in cruises %}
+  <div class="col-sm-3">
+    <div class="card card-padding">
+      <img class="card-img-top" src="../static/images/" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">From {{ cruise["SourceLocation"] }} to {{ cruise["DestinationLocation"]}}</h5>
+        <p class="card-text">Cost: {{cruise["Fare"]}}</p>
+        <a href="#" class="btn btn-primary btn-purple">Find Flights</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<div class="row">
+  <div class="col-sm-12 text-center">
+    <h2>Accommodation</h2>
+  </div>
+</div>
+<div class="row">
+{% for accommodation in accommodations %}
+  <div class="col-sm-3">
+    <div class="card card-padding">
+      <img class="card-img-top" src="../static/images/apartment.jpeg" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">{{ accommodation["AccommodationType"] }}</h5>
+        <p class="card-text">Cost: ${{accommodation["RatePerNight"]}}</p>
+        <a href="#" class="btn btn-primary btn-purple">Find Flights</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
 </div>
 
 {% endblock %}

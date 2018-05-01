@@ -39,10 +39,16 @@ def getName():
 @app.route('/')
 @app.route('/index')
 def index():
+    cursor.execute("SELECT * FROM Location;")
+    locations = cursor.fetchmany(4)
+    cursor.execute("SELECT * FROM Cruise;")
+    cruises = cursor.fetchmany(4)
+    cursor.execute("SELECT * FROM Accommodation;")
+    accommodations = cursor.fetchmany(4)
     if flask_login.current_user.is_authenticated:
-        user_name = getName()
-        return render_template('index.html', base_template = "base_loggedin.html", name = user_name)
-    return render_template('index.html', base_template = "base.html")
+        user_name = flask_login.current_user.get_id()
+        return render_template('index.html', base_template = "base_loggedin.html", name = user_name, locations=locations, cruises=cruises, accommodations=accommodations)
+    return render_template('index.html', base_template = "base.html", locations=locations, cruises=cruises, accommodations=accommodations)
 
 
 @app.route('/login',methods=['GET','POST'])

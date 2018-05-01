@@ -46,7 +46,7 @@ def index():
     cursor.execute("SELECT * FROM Accommodation;")
     accommodations = cursor.fetchmany(4)
     if flask_login.current_user.is_authenticated:
-        user_name = flask_login.current_user.get_id()
+        user_name = getName()
         return render_template('index.html', base_template = "base_loggedin.html", name = user_name, locations=locations, cruises=cruises, accommodations=accommodations)
     return render_template('index.html', base_template = "base.html", locations=locations, cruises=cruises, accommodations=accommodations)
 
@@ -139,7 +139,7 @@ def createGroup():
             if len(data) != 0:
                 flash("Travel ID already exists. Enter another value")
                 redirect(url_for("createGroup"))
-            else: 
+            else:
                 sql = "INSERT INTO `Group` VALUES (NULL, " + str(travelID) + ", 1, NULL, NULL, NULL, NULL);"
                 cursor.execute(sql)
                 connection.commit()

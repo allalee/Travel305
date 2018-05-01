@@ -98,3 +98,25 @@ fieldset[disabled] .btn-purple.active {
   color: #401F7C;
   background-color: #FFFFFF;
 }
+
+ul.groupItems{
+  text-align:center; 
+  list-style-position:inside;
+  list-style-type:none;
+}
+
+.joinGroupItems table, th, td {
+  border: 3px solid black;
+}
+
+.joinGroupTable table {
+  text-align:center;
+  width: 70%;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+tr.joinGroupHeader th {
+  height:50px;
+}
+

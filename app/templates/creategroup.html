@@ -1,0 +1,36 @@
+{% extends "groupbase.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+<div class="jumbotron jumbotron-location text-center">
+  <h1>Create a group here!</h1>
+  <p>Wish to join a group instead? Go here: <a href="{{ url_for('joinGroup')}}">Join Group</a></p>
+</div>
+<div class="container-fluid container-bg" id="login-background">
+  <div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+      <div class="card card-padding card-custom-size">
+        <img class="card-img-top" src="../static/images/GroupMe.jpg">
+        <div class="card-body">
+          <h3 class="card-title">Create Group</h3>
+          <form action="" method="post", class="form-horizontal">
+            {{ form.hidden_tag() }}
+            <p class="card-text">
+              {{wtf.form_field(form.email,class="form-control")}}
+            </p>
+            <p class="card-text">
+              {{wtf.form_field(form.name,class="form-control")}}
+            </p>
+            <p class="card-text">
+              {{wtf.form_field(form.travelID,class="form-control")}}
+            </p>
+            <p>{{wtf.form_field(form.submit,class="btn btn-purple")}}</p>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4 my-auto"></div>
+  </div>
+</div>
+{% endblock %}

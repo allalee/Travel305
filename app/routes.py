@@ -244,3 +244,7 @@ def joinGroup():
         if redirect_option:
             return redirect(url_for('index'))
     return render_template('joingroup.html', name = username, form = form, groups = groupData, group_status = group_status, travelID = travelID)
+
+@app.route('/addToCart', methods=['POST'])
+def addToCart():
+    return (request.form['submit'])

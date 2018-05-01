@@ -12,8 +12,8 @@ cursor = conn.cursor() # Cursor object is what we will use to execute commands
 
 cursor.execute("ALTER TABLE Passengers DROP FOREIGN KEY PassengersPartOf;")
 # cursor.execute("ALTER TABLE Passengers DROP FOREIGN KEY PassengersPayment;")
-cursor.execute("ALTER TABLE `Group` DROP FOREIGN KEY GroupID;")
-cursor.execute("ALTER TABLE `Group` DROP FOREIGN KEY TravelID;")
+# cursor.execute("ALTER TABLE `Group` DROP FOREIGN KEY GroupID;")
+# cursor.execute("ALTER TABLE `Group` DROP FOREIGN KEY TravelID;")
 
 TableList = ["Travels", "Makes", "Writes", "Books", "PartOf", "Cruise", "Flight", "CarRental", "Employee", 
 	"Accommodation", "`Group`", "Transportation", "Location", "Review", "Payment", "Passengers", "Users"]

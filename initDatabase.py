@@ -147,8 +147,8 @@ for table in initTable:
 
 alterP1 = "ALTER TABLE Passengers ADD CONSTRAINT PassengersPartOf FOREIGN KEY (PassengerID) REFERENCES PartOf(PassengerID);"
 # alterP2 = "ALTER TABLE Passengers ADD CONSTRAINT PassengersPayment FOREIGN KEY (PaymentID) REFERENCES Makes(PaymentID) ON DELETE CASCADE ON UPDATE CASCADE;"
-alterP3 = "ALTER TABLE `Group` ADD CONSTRAINT GroupID FOREIGN KEY (GroupID) REFERENCES Books(GroupID);"
-alterP4 = "ALTER TABLE `Group` ADD CONSTRAINT TravelID FOREIGN KEY (TravelID) REFERENCES Travels(TravelID);"
-alterTable = [alterP1, alterP3, alterP4]
+# alterP3 = "ALTER TABLE `Group` ADD CONSTRAINT GroupID FOREIGN KEY (GroupID) REFERENCES Books(GroupID);"
+# alterP4 = "ALTER TABLE `Group` ADD CONSTRAINT TravelID FOREIGN KEY (TravelID) REFERENCES Travels(TravelID);"
+alterTable = [alterP1]
 for alter in alterTable:
 	cursor.execute(alter)

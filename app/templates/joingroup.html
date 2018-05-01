@@ -1,36 +1,38 @@
 {% extends "groupbase.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
+<!-- {% import "bootstrap/wtf.html" as wtf %} -->
 
 {% block content %}
 <div class="jumbotron jumbotron-location text-center">
-  <h1>Let's get to booking!</h1>
-  <p>If you don't have an account, here.</p>
+  <h1>Join a group here!</h1>
+  <p>Want to make a group instead? Go here: <a href="{{ url_for('createGroup')}}">Create Group</a></p>
 </div>
-<!-- <div class="container-fluid container-bg" id="login-background">
-  <div class="row">
-    <div class="col-sm-4"></div>
-    <div class="col-sm-4">
-      <div class="card card-padding card-custom-size">
-        <img class="card-img-top" src="../static/images/user.png" alt="User Avatar">
-        <div class="card-body">
-          <h3 class="card-title">Log In</h3>
-          <form action="" method="post", class="form-horizontal">
-            {{ form.hidden_tag() }}
-            <p class="card-text">
-              {{wtf.form_field(form.email,class="form-control")}}
-            </p>
-            <p class="card-text">
-              {{wtf.form_field(form.name,class="form-control")}}
-            </p>
-            <p class="card-text">
-              {{wtf.form_field(form.travelID,class="form-control")}}
-            </p>
-            <p>{{wtf.form_field(form.submit,class="btn btn-purple")}}</p>
-          </form>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-4 my-auto"></div>
-  </div>
-</div> -->
+<div>
+  <h1>Current Group Status</h1>
+  {% if group_status %}
+    <p>You are in group: {{travelID}}</p>
+  {% else %}
+    <p>You are not in a group</p>
+  {% endif %}
+  <form action = "" method="post">
+    <p>Enter the travel ID of the group you wish to join: {{form.travelID}} {{form.submit}} {{form.leaveSubmit}}</p>
+  </form>
+</div>
+<div class = "joinGroupItems joinGroupTable">
+  <table>
+    <tr class="joinGroupHeader">
+      <th>Group Travel ID</th>
+      <th>Group Size</th>
+      <th>Source Location</th>
+      <th>Destination Location</th>
+    </tr>
+    {% for group in groups %}
+    <tr>
+      <td>{{group["TravelID"]}}</td>
+      <td>{{group["GroupSize"]}}</td>
+      <td>{{group["SourceLocation"]}}</td>
+      <td>{{group["DestinationLocation"]}}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
 {% endblock %}

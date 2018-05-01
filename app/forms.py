@@ -21,3 +21,7 @@ class CreateGroup(FlaskForm):
     name = StringField("Name (must match signup name)", validators=[DataRequired()])
     travelID = IntegerField("Enter a travel ID to identify your group", validators=[DataRequired()])
     submit = SubmitField("Submit")
+class JoinGroup(FlaskForm):
+    travelID = IntegerField("Enter the travel ID of the group you wish to join", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+    leaveSubmit = SubmitField("Leave Current Group")

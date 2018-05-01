@@ -247,4 +247,58 @@ def joinGroup():
 
 @app.route('/addToCart', methods=['POST'])
 def addToCart():
-    return (request.form['submit'])
+    redirect_option = False
+    selected = True
+    if flask_login.current_user.is_authenticated:
+        email = flask_login.current_user.get_id()
+        sql = "SELECT ID FROM Users WHERE Email = \'" + email + "\';"
+        cursor.execute(sql)
+        data = cursor.fetchall()
+        ID = data[0]["ID"]
+        sql = "SELECT GroupID FROM PartOf WHERE PassengerID = " + str(ID) + ";"
+        cursor.execute(sql)
+        data = cursor.fetchall()
+        if len(data) == 0:
+            return redirect(url_for('booking'))
+        else:
+            if 'makeSource' in request.form:
+                print("makeSource")
+            elif 'makeDest' in request.form:
+                print("makeDest")
+            elif 'addCruise' in request.form:
+                print("addCruise")
+            elif 'addAccommodation' in request.form:
+                print("addAcc")
+    else:
+        selected = False
+        redirect_option = True
+    if redirect_option:
+        return redirect(url_for('mustBeLogged'))
+    if selected:
+        return redirect(url_for('booking'))
+
+@app.route('/mustBeLogged', methods=['GET','POST'])
+def mustBeLogged():
+    return render_template('mustbelogged.html')
+
+@app.route('/booking', methods=['GET','POST'])
+def booking():
+    user_name = getName()
+    email = flask_login.current_user.get_id()
+    sql = "SELECT ID FROM Users WHERE Email = \'" + email + "\';"
+    cursor.execute(sql)
+    data = cursor.fetchall()
+    ID = data[0]["ID"]
+    sql = "SELECT GroupID FROM PartOf WHERE PassengerID = " + str(ID) + ";"
+    cursor.execute(sql)
+    data = cursor.fetchall()
+    if len(data) == 0:
+        groupInfo = ()
+        val = True
+    else:
+        groupID = data[0]["GroupID"]   
+        sql = "SELECT * FROM `Group` WHERE GroupID = " + str(groupID) + ";"
+        cursor.execute(sql)
+        groupInfo = cursor.fetchall()
+        val = False
+    return render_template('booking.html', base_template = "base_loggedin.html", name = user_name, group = groupInfo, val = val)

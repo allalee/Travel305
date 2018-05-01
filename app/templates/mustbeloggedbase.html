@@ -20,36 +20,6 @@
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('index')}}">Home</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Accommodations</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Flights</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Cruises</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('showLocations')}}">Locations</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Car Rentals</a>
-          </li>
-          <li class="nav-item">
-            <a class = "nav-link" href="{{ url_for('groupHome')}}">Groups</a>
-          </li>
-          <li class="nav-item">
-            <a class = "nav-link" href="{{ url_for('booking')}}">Booking</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <p class="navbar-text">
-              Welcome, {{name}}</p>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('logout')}}">Log Out</a>
-          </li>
         </ul>
       </nav>
         {% with messages = get_flashed_messages() %}

@@ -22,7 +22,8 @@
         <form action="{{ url_for('addToCart') }}" method="post">
           <h5 class="card-title">{{ location["CityName"] }}, {{ location["State"]}}</h5>
           <p class="card-text">List cost of flights here</p>
-          <button class = "btn btn-purple" type="submit" name = "submit" value= {{location["LocationID"]}}>Add To Cart</button>
+          <button class = "btn btn-purple" type="submit" name = "makeSource" value= {{location["LocationID"]}}>Make Source Location</button>
+          <button class = "btn btn-purple" type="submit" name = "makeDest" value= {{location["LocationID"]}}>Make Destination Location</button>
       </form>
       </div>
     </div>
@@ -43,7 +44,7 @@
         <form action = "{{url_for('addToCart') }}" method='post'>
         <h5 class="card-title">From {{ cruise["SourceLocation"] }} to {{ cruise["DestinationLocation"]}}</h5>
         <p class="card-text">Cost: {{cruise["Fare"]}}</p>
-        <button class = "btn btn-purple" type="submit" name = "submit" value= {{cruise["CruiseNumber"]}}>Add To Cart</button>
+        <button class = "btn btn-purple" type="submit" name = "addCruise" value= {{cruise["CruiseNumber"]}}>Add To Cart</button>
       </form>
       </div>
     </div>
@@ -64,7 +65,7 @@
         <form action = "{{url_for('addToCart') }}" method='post'>
         <h5 class="card-title">{{ accommodation["AccommodationType"] }}</h5>
         <p class="card-text">Cost: ${{accommodation["RatePerNight"]}}</p>
-        <button class = "btn btn-purple" type="submit" name = "submit" value= {{accommodation["AccommodationType"]}}>Add To Cart</button>
+        <button class = "btn btn-purple" type="submit" name = "addAccommodation" value= {{accommodation["AccommodationType"]}}>Add To Cart</button>
       </form>
       </div>
     </div>

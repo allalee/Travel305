@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request, json, jsonify
 from app import app
-from app.forms import LoginForm, SignupForm, GroupNavForm, CreateGroup, JoinGroup
+from app.forms import LoginForm, SignupForm, GroupNavForm, CreateGroup, JoinGroup, Book
 import flask_login
 import pymysql.cursors
 
@@ -140,7 +140,7 @@ def createGroup():
                 flash("Travel ID already exists. Enter another value")
                 redirect(url_for("createGroup"))
             else:
-                sql = "INSERT INTO `Group` VALUES (NULL, " + str(travelID) + ", 1, NULL, NULL, NULL, NULL);"
+                sql = "INSERT INTO `Group` VALUES (NULL, " + str(travelID) + ", 1, NULL, NULL, NULL, NULL, NULL, NULL);"
                 cursor.execute(sql)
                 connection.commit()
                 sql = "SELECT * FROM Users WHERE Email = \'" + email + "\';"
@@ -245,6 +245,46 @@ def joinGroup():
             return redirect(url_for('index'))
     return render_template('joingroup.html', name = username, form = form, groups = groupData, group_status = group_status, travelID = travelID)
 
+
+def makeSource(ID, groupID):
+    sql = "UPDATE `Group` SET SourceLocation = " + str(ID) + " WHERE GroupID = " + str(groupID) + ";"
+    cursor.execute(sql)
+    connection.commit()
+    sql = "SELECT CityName FROM Location WHERE LocationID = " + str(ID) + ";"
+    cursor.execute(sql)
+    cityName = cursor.fetchall()
+    cityName = cityName[0]["CityName"]
+    sql = "UPDATE `Group` SET SrcName = \'" + cityName + "\' WHERE GroupID = " + str(groupID) + ";"
+    cursor.execute(sql)
+    connection.commit()
+
+def makeDest(ID, groupID):
+    sql = "UPDATE `Group` SET DestinationLocation = " + str(ID) + " WHERE GroupID = " + str(groupID) + ";"
+    cursor.execute(sql)
+    connection.commit()
+    sql = "SELECT CityName FROM Location WHERE LocationID = " + str(ID) + ";"
+    cursor.execute(sql)
+    cityName = cursor.fetchall()
+    cityName = cityName[0]["CityName"]
+    sql = "UPDATE `Group` SET DestName = \'" + cityName + "\' WHERE GroupID = " + str(groupID) + ";"
+    cursor.execute(sql)
+    connection.commit()
+
+def addTransport(ID, groupID):
+    sql = "SELECT TransportationType FROM Transportation WHERE TransportationID = " + str(ID) + ";"
+    cursor.execute(sql)
+    transport = cursor.fetchall()
+    transport = transport[0]["TransportationType"]
+    sql = "UPDATE `Group` SET ModeOfTransport = \'" + transport + "\' WHERE GroupID = " + str(groupID) + ";"
+    cursor.execute(sql)
+    connection.commit()
+
+#Accommodation is currently being stored in the Purpose field of the Group table!
+def addAccommodation(accommodation, groupid, facilities, rate, discount):
+    sql = "UPDATE `Group` SET Accommodation = \'%s:%s:%s:%s\' WHERE GroupID = %s;" % (str(accommodation), str(facilities), rate.strip("/"), discount.strip("/"), str(groupid))
+    cursor.execute(sql)
+    connection.commit()
+
 @app.route('/addToCart', methods=['POST'])
 def addToCart():
     redirect_option = False
@@ -262,13 +302,17 @@ def addToCart():
             return redirect(url_for('booking'))
         else:
             if 'makeSource' in request.form:
-                print("makeSource")
+                makeSource(request.form['makeSource'], data[0]["GroupID"])
             elif 'makeDest' in request.form:
-                print("makeDest")
+                makeDest(request.form['makeDest'], data[0]["GroupID"])
             elif 'addCruise' in request.form:
-                print("addCruise")
+                addTransport(request.form['addCruise'], data[0]["GroupID"])
             elif 'addAccommodation' in request.form:
-                print("addAcc")
+                addAccommodation(request.form['addAccommodation'], data[0]["GroupID"], request.form['Facilities'], request.form['Rate'], request.form['Discount'])
+            elif 'addCarRental' in request.form:
+                addTransport(request.form['addCarRental'], data[0]["GroupID"])
+            elif 'addFlight' in request.form:
+                addTransport(request.form['addFlight'], data[0]["GroupID"])
     else:
         selected = False
         redirect_option = True
@@ -281,8 +325,16 @@ def addToCart():
 def mustBeLogged():
     return render_template('mustbelogged.html')
 
+def booking_parse_accommodation(acc):
+    if acc == None:
+        return None
+    else:
+        lst = acc.split(":")
+        return lst
+
 @app.route('/booking', methods=['GET','POST'])
 def booking():
+    form = Book()
     user_name = getName()
     email = flask_login.current_user.get_id()
     sql = "SELECT ID FROM Users WHERE Email = \'" + email + "\';"
@@ -292,13 +344,37 @@ def booking():
     sql = "SELECT GroupID FROM PartOf WHERE PassengerID = " + str(ID) + ";"
     cursor.execute(sql)
     data = cursor.fetchall()
+    if form.is_submitted():
+        sql = "SELECT * FROM `Group` WHERE GroupID = \'%s\';" % (str(ID))
+        cursor.execute(sql)
+        items = cursor.fetchall()
+        f = False
+        for key, val in items[0].items():
+            if val == None:
+                f = True
+                break
+        if f or form.duration.data == None:
+            flash("You have not selected enough information to book this trip!")
+        else:
+            v = booking_parse_accommodation(items[0]["Accommodation"])
+            sql = "INSERT INTO Books VALUES (%s,%s,\'%s\',\'%s\');" % (str(items[0]["GroupID"]), str(form.duration.data), v[0], v[1])
+            cursor.execute(sql)
+            connection.commit()
+            return redirect(url_for("booked_trips"))
     if len(data) == 0:
         groupInfo = ()
+        acc = None
         val = True
     else:
         groupID = data[0]["GroupID"]   
         sql = "SELECT * FROM `Group` WHERE GroupID = " + str(groupID) + ";"
         cursor.execute(sql)
         groupInfo = cursor.fetchall()
+        acc = booking_parse_accommodation(groupInfo[0]['Accommodation'])
         val = False
-    return render_template('booking.html', base_template = "base_loggedin.html", name = user_name, group = groupInfo, val = val)
+    return render_template('booking.html', base_template = "base_loggedin.html", name = user_name, group = groupInfo, val = val, acc = acc, form = form)
+
+@app.route('/bookedtrips', methods=['GET','POST'])
+def booked_trips():
+    #MUST CHECK IF WE BOOKED A TRIP AND DISPLAY IN TABLE
+    return render_template('bookedtrips.html', base_template = "base_loggedin.html")

@@ -1,0 +1,26 @@
+{% extends base_template %}
+
+{% block content %}
+<div class="jumbotron jumbotron-location text-center">
+  <h1>Check out some accommodations we offer!</h1>
+  <p>If you are interested in an accommodation, <a href="{{ url_for('signup')}}">sign up</a> or <a href="{{ url_for('login')}}">login</a> to plan your trip.</p>
+</div>
+<div class="container-fluid container-bg">
+{% for accommodations_batched in accommodations|batch(4) %}
+<div class="row">
+   {% for accommodation in accommodations_batched %}
+  <div class="col-sm-3">
+    <div class="card card-padding">
+      <img class="card-img-top" src="../static/images/{{ accommodation["ImgDir"] }}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">{{ accommodation["AccommodationType"] }}</h5>
+        <p class="card-text">Cost per night: ${{accommodation["RatePerNight"]}}</p>
+        <a href="#" class="btn btn-primary btn-purple">Find Flights</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endfor %}
+</div>
+{% endblock %}

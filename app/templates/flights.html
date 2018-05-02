@@ -1,0 +1,25 @@
+{% extends base_template %}
+
+{% block content %}
+<div class="jumbotron jumbotron-location text-center">
+  <h1>Check out some flights we offer!</h1>
+  <p>If you are interested in a flights, <a href="{{ url_for('signup')}}">sign up</a> or <a href="{{ url_for('login')}}">login</a> to plan your trip.</p>
+</div>
+<div class="container-fluid container-bg">
+{% for flights_batched in flights|batch(4) %}
+<div class="row">
+   {% for flight in flights_batched %}
+  <div class="col-sm-3">
+    <div class="card card-padding">
+      <img class="card-img-top" src="../static/images/plane.jpeg" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">From {{ flight["SourceLocation"] }} to {{flight["DestinationLocation"]}}</h5>
+        <p class="card-text">Fare: ${{flight["Fare"]}}</p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endfor %}
+</div>
+{% endblock %}

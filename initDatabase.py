@@ -74,6 +74,7 @@ initAccommodationTable = "CREATE TABLE Accommodation (AccommodationType varchar(
 "Facilities varchar(255),"\
 "RatePerNight int,"\
 "Discount int,"\
+"ImgDir varchar(255),"\
 "primary key (AccommodationType, Facilities));"
 
 initEmployeeTable = "CREATE TABLE Employee (EmployeeID int,"\
@@ -86,6 +87,7 @@ initEmployeeTable = "CREATE TABLE Employee (EmployeeID int,"\
 initCarRental = "CREATE TABLE CarRental (CarRentalConfirmationID int,"\
 "CarType varchar(255),"\
 "Rent int,"\
+"ImgDir varchar(255),"\
 "primary key (CarRentalConfirmationID),"\
 "foreign key (CarRentalConfirmationID) references Transportation(TransportationID));"
 

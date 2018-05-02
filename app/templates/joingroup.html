@@ -1,5 +1,5 @@
 {% extends "groupbase.html" %}
-<!-- {% import "bootstrap/wtf.html" as wtf %} -->
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block content %}
 <div class="jumbotron jumbotron-location text-center">
@@ -14,11 +14,11 @@
     <p>You are not in a group</p>
   {% endif %}
   <form action = "" method="post">
-    <p>Enter the travel ID of the group you wish to join: {{form.travelID}} {{form.submit}} {{form.leaveSubmit}}</p>
+    <p>Enter the travel ID of the group you wish to join: {{form.travelID}} {{wtf.form_field(form.submit,class="btn btn-purple")}} {{wtf.form_field(form.leaveSubmit,class="btn btn-purple")}}</p>
   </form>
 </div>
-<div class = "joinGroupItems joinGroupTable">
-  <table >
+<div class = "container-fluid">
+  <!-- <table >
     <tr class="joinGroupHeader">
       <th>Group Travel ID</th>
       <th>Group Size</th>
@@ -33,6 +33,26 @@
       <td>{{group["DestinationLocation"]}}</td>
     </tr>
     {% endfor %}
+  </table> -->
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Group Travel ID</th>
+        <th scope="col">Group Size</th>
+        <th scope="col">Source Location</th>
+        <th scope="col">Destination Location</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for group in groups %}
+      <tr>
+        <td>{{group["TravelID"]}}</td>
+        <td>{{group["GroupSize"]}}</td>
+        <td>{{group["SourceLocation"]}}</td>
+        <td>{{group["DestinationLocation"]}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
   </table>
 </div>
 {% endblock %}

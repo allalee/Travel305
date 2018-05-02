@@ -50,6 +50,41 @@ def index():
         return render_template('index.html', base_template = "base_loggedin.html", name = user_name, locations=locations, cruises=cruises, accommodations=accommodations)
     return render_template('index.html', base_template = "base.html", locations=locations, cruises=cruises, accommodations=accommodations)
 
+@app.route('/accommodations')
+def accommodations():
+    cursor.execute("SELECT * FROM Accommodation;")
+    accommodations = cursor.fetchall()
+    if flask_login.current_user.is_authenticated:
+        user_name = getName()
+        return render_template('accommodations.html', base_template = "base_loggedin.html", name = user_name, accommodations=accommodations)
+    return render_template('accommodations.html', base_template = "base.html", accommodations=accommodations)
+
+@app.route('/cruises')
+def cruises():
+    cursor.execute("SELECT * FROM Cruise;")
+    cruises = cursor.fetchall()
+    if flask_login.current_user.is_authenticated:
+        user_name = getName()
+        return render_template('cruises.html', base_template = "base_loggedin.html", name = user_name, cruises=cruises)
+    return render_template('cruises.html', base_template = "base.html", cruises=cruises)
+
+@app.route('/carRentals')
+def carRentals():
+    cursor.execute("SELECT * FROM CarRental;")
+    carRentals = cursor.fetchall()
+    if flask_login.current_user.is_authenticated:
+        user_name = getName()
+        return render_template('carRentals.html', base_template = "base_loggedin.html", name = user_name, carRentals=carRentals)
+    return render_template('cruises.html', base_template = "base.html", carRentals=carRentals)
+
+@app.route('/flights')
+def flights():
+    cursor.execute("SELECT * FROM Flight;")
+    flights = cursor.fetchall()
+    if flask_login.current_user.is_authenticated:
+        user_name = getName()
+        return render_template('flights.html', base_template = "base_loggedin.html", name = user_name, flights=flights)
+    return render_template('flights.html', base_template = "base.html", flights=flights)
 
 @app.route('/login',methods=['GET','POST'])
 def login():

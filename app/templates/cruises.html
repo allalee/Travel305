@@ -1,0 +1,26 @@
+{% extends base_template %}
+
+{% block content %}
+<div class="jumbotron jumbotron-location text-center">
+  <h1>Check out some cruises we offer!</h1>
+  <p>If you are interested in a cruise, <a href="{{ url_for('signup')}}">sign up</a> or <a href="{{ url_for('login')}}">login</a> to plan your trip.</p>
+</div>
+<div class="container-fluid container-bg">
+{% for cruises_batched in cruises|batch(4) %}
+<div class="row">
+   {% for cruise in cruises_batched %}
+  <div class="col-sm-3">
+    <div class="card card-padding">
+      <img class="card-img-top" src="../static/images/{{ ["ImgDir"] }}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">From {{ cruise["SourceLocation"] }} to {{cruise["DestinationLocation"]}}</h5>
+        <p class="card-text">Fare: ${{cruise["Fare"]}}</p>
+        <a href="#" class="btn btn-primary btn-purple">Find Flights</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endfor %}
+</div>
+{% endblock %}

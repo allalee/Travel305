@@ -1,14 +1,35 @@
 {% extends "base_loggedin.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block content %}
 <div class="jumbotron jumbotron-location text-center">
-	<h1>Welcome to grouping. Create your own group or join one for your trip.</h1>
+	<h1>Welcome to Travel305 Groups. Create your own group or join one for your trip.</h1>
 	<p>Grouping is the simplest way to book trips from location to location with friends and workers!</p>
 </div>
-<form action="" method="post">
-	<ul style="text-align:center; list-style-position:inside;list-style-type:none;">
-  		<li><img src="../static/images/groupvaca.jpg" width="700" height="533"><img src="../static/images/student_group.jpg" width="700" height="533"></li>
-  		<li>{{form.createGroup}}{{form.joinGroup}}</li>
-	</ul>  
-</form>
+
+<div class="container-fluid container-bg" id="login-background">
+  <div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4 text-center">
+      <div class="card card-padding card-custom-size">
+        <img class="card-img-top" src="../static/images/student_group.jpg" alt="Group Photo">
+        <div class="card-body">
+          <h3 class="card-title">Join or Create a Group</h3>
+          <form action="" method="post", class="form-horizontal">
+            {{ form.hidden_tag() }}
+						<p class="card-text">Create a group and invite others on the trip by sharing your Group ID. Or join an already created group with a valid Group ID.</p>						
+            <p class="card-text">
+              {{wtf.form_field(form.joinGroup,class="btn btn-purple")}}
+            </p>
+            <p class="card-text">
+              {{wtf.form_field(form.createGroup,class="btn btn-purple")}}
+            </p>
+
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4 my-auto"></div>
+  </div>
+</div>
 {% endblock %}

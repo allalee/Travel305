@@ -64,8 +64,10 @@ initGroupTable = "CREATE TABLE `Group` (GroupID int auto_increment,"\
 "`GroupSize` int,"\
 "SourceLocation int,"\
 "`DestinationLocation` int,"\
+"SrcName varchar(255),"\
+"DestName varchar(255),"\
 "ModeOfTransport varchar(255),"\
-"Purpose varchar(1000),"\
+"Accommodation varchar(255),"\
 "primary key (GroupID),"\
 "foreign key (SourceLocation) references Location(LocationID),"\
 "foreign key (DestinationLocation) references Location(LocationID));"\

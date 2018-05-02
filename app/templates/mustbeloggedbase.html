@@ -20,39 +20,6 @@
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('index')}}">Home</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('accommodations')}}">Accommodations</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('flights')}}">Flights</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('cruises')}}">Cruises</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('showLocations')}}">Locations</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('carRentals')}}">Car Rentals</a>
-          </li>
-          <li class="nav-item">
-            <a class = "nav-link" href="{{ url_for('groupHome')}}">Groups</a>
-          </li>
-          <li class="nav-item">
-            <a class = "nav-link" href="{{ url_for('booking')}}">Booking</a>
-          </li>
-          <li class="nav-item">
-            <a class = "nav-link" href="{{ url_for('booked_trips')}}">Booked Trips</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <p class="navbar-text">
-              Welcome, {{name}}</p>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('logout')}}">Log Out</a>
-          </li>
         </ul>
       </nav>
         {% with messages = get_flashed_messages() %}

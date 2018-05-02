@@ -1,0 +1,59 @@
+{% extends base_template %}
+
+{% block content %}
+<div class="jumbotron jumbotron-location text-center">
+  <h1>Welcome to our booking page!</h1>
+  <p>To add items to your cart, search for items on our other pages and add them to the cart. Make sure you are in a group first!</p>
+</div>
+<div>
+  <form action="" method="post">
+  <p>{{form.duration}}Enter Duration (In Days)</p>
+  <p>{{form.submit}}</p>
+</form>
+</div>
+<div class = "joinGroupItems joinGroupTable">
+  <table>
+    <tr class="joinGroupHeader">
+      <th>Accommodation Type</th>
+      <th>Facilities</th>
+      <th>Rate Per Night</th>
+      <th>Discount</th>
+    </tr>
+    {% if acc == None %}
+    <tr>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td>{{acc[0]}}</td>
+      <td>{{acc[1]}}</td>
+      <td>{{acc[2]}}</td>
+      <td>{{acc[3]}}</td>
+    </tr>
+    {% endif %}
+  </table>
+  <table >
+    <tr class="joinGroupHeader">
+      <th>Group Travel ID</th>
+      <th>Group Size</th>
+      <th>Source Location</th>
+      <th>Destination Location</th>
+      <th>Mode of Transport</th>
+    </tr>
+    {% if val %}
+      <p>You are not part of a group and cannot make changes!</p>
+    {% else %}
+      <tr>
+        <td>{{group[0]["TravelID"]}}</td>
+        <td>{{group[0]["GroupSize"]}}</td>
+        <td>{{group[0]["SrcName"]}}</td>
+        <td>{{group[0]["DestName"]}}</td>
+        <td>{{group[0]["ModeOfTransport"]}}</td>
+      </tr>
+    {% endif %}
+  </table>
+</div>
+{% endblock %}

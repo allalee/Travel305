@@ -25,3 +25,6 @@ class JoinGroup(FlaskForm):
     travelID = IntegerField("Enter the travel ID of the group you wish to join", validators=[DataRequired()])
     submit = SubmitField("Submit")
     leaveSubmit = SubmitField("Leave Current Group")
+class Book(FlaskForm):
+    duration = IntegerField("Enter Duration", validators=[DataRequired()])
+    submit = SubmitField("Book This Trip")

@@ -11,11 +11,13 @@
    {% for cruise in cruises_batched %}
   <div class="col-sm-3">
     <div class="card card-padding">
-      <img class="card-img-top" src="../static/images/{{ ["ImgDir"] }}" alt="Card image cap">
+      <img class="card-img-top" src="../static/images/cruise.jpg" alt="Card image cap">
       <div class="card-body">
-        <h5 class="card-title">From {{ cruise["SourceLocation"] }} to {{cruise["DestinationLocation"]}}</h5>
-        <p class="card-text">Fare: ${{cruise["Fare"]}}</p>
-        <a href="#" class="btn btn-primary btn-purple">Find Flights</a>
+        <form action = "{{url_for('addToCart') }}" method='post'>
+        <h5 class="card-title">From {{ cruise["SourceLocation"] }} to {{ cruise["DestinationLocation"]}}</h5>
+        <p class="card-text">Cost: {{cruise["Fare"]}}</p>
+        <button class = "btn btn-purple" type="submit" name = "addCruise" value= {{cruise["CruiseNumber"]}}>Select Cruise</button>
+      </form>
       </div>
     </div>
   </div>

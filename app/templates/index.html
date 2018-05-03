@@ -4,8 +4,8 @@
 {% block content %}
 <div class="jumbotron jumbotron-location text-center">
   <h1>Welcome to Travel305!</h1>
-  <p>Check out what we offer below. If you're interested in creating a group and planning a trip
-    <a href='{{ url_for('signup')}}'>sign up</a> or <a href='{{ url_for('signup')}}'>log in</a>.</p>
+  <p>Check out some of what we offer below. If you're interested in creating a group and planning a trip
+    <a href='{{ url_for('signup')}}'>sign up</a> or <a href='{{ url_for('login')}}'>log in</a>.</p>
 </div>
 <div class="container-fluid container-bg">
 <div class="row">
@@ -39,12 +39,54 @@
 {% for cruise in cruises %}
   <div class="col-sm-3">
     <div class="card card-padding">
-      <img class="card-img-top" src="../static/images/" alt="Card image cap">
+      <img class="card-img-top" src="../static/images/cruise.jpg" alt="Card image cap">
       <div class="card-body">
         <form action = "{{url_for('addToCart') }}" method='post'>
         <h5 class="card-title">From {{ cruise["SourceLocation"] }} to {{ cruise["DestinationLocation"]}}</h5>
         <p class="card-text">Cost: {{cruise["Fare"]}}</p>
-        <button class = "btn btn-purple" type="submit" name = "addCruise" value= {{cruise["CruiseNumber"]}}>Select Transportation</button>
+        <button class = "btn btn-purple" type="submit" name = "addCruise" value= {{cruise["CruiseNumber"]}}>Select Cruise</button>
+      </form>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<div class="row">
+  <div class="col-sm-12 text-center">
+    <h2>Flights</h2>
+  </div>
+</div>
+<div class="row">
+{% for flight in flights %}
+  <div class="col-sm-3">
+    <div class="card card-padding">
+      <img class="card-img-top" src="../static/images/plane.jpeg" alt="Card image cap">
+      <div class="card-body">
+        <form action = "{{url_for('addToCart') }}" method='post'>
+        <h5 class="card-title">From {{ flight["SourceLocation"] }} to {{ flight["DestinationLocation"]}}</h5>
+        <p class="card-text">Cost: ${{flight["Fare"]}}</p>
+        <button class = "btn btn-purple" type="submit" name = "addFlight" value= {{flight["FlightNumber"]}}>Select Flight</button>
+      </form>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<div class="row">
+  <div class="col-sm-12 text-center">
+    <h2>Car Rentals</h2>
+  </div>
+</div>
+<div class="row">
+{% for carRental in carRentals %}
+  <div class="col-sm-3">
+    <div class="card card-padding">
+      <img class="card-img-top" src="../static/images/{{ carRental["ImgDir"]}}" alt="Card image cap">
+      <div class="card-body">
+        <form action = "{{url_for('addToCart') }}" method='post'>
+        <h5 class="card-title">{{carRental["CarType"]}}</h5>
+        <p class="card-text">Cost: ${{carRental["Rent"]}}</p>
+        <button class = "btn btn-purple" type="submit" name = "addCar" value= {{carRental["CarRentalConfirmationID"]}}>Select Car Rental</button>
       </form>
       </div>
     </div>
@@ -65,7 +107,8 @@
         <form action = "{{url_for('addToCart') }}" method='post'>
         <h5 class="card-title">{{ accommodation["AccommodationType"] }}</h5>
         <p class="card-text">Cost: ${{accommodation["RatePerNight"]}}</p>
-        <button class = "btn btn-purple" type="submit" name = "addAccommodation" value= {{accommodation["AccommodationType"]}}>Select Accommodation</button>
+        {% set acctype = accommodation["AccommodationType"] %}
+        <button class = "btn btn-purple" type="submit" name = "addAccommodation" value= "{{acctype}}">Select Accommodation</button>
         {% set acc = accommodation["Facilities"] %}
         <input type="hidden" name="Facilities" value= "{{acc}}"/>
         <input type="hidden" name="Rate" value={{accommodation["RatePerNight"]}}/>

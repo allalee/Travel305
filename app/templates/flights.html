@@ -13,8 +13,11 @@
     <div class="card card-padding">
       <img class="card-img-top" src="../static/images/plane.jpeg" alt="Card image cap">
       <div class="card-body">
-        <h5 class="card-title">From {{ flight["SourceLocation"] }} to {{flight["DestinationLocation"]}}</h5>
-        <p class="card-text">Fare: ${{flight["Fare"]}}</p>
+        <form action = "{{url_for('addToCart') }}" method='post'>
+        <h5 class="card-title">From {{ flight["SourceLocation"] }} to {{ flight["DestinationLocation"]}}</h5>
+        <p class="card-text">Cost: ${{flight["Fare"]}}</p>
+        <button class = "btn btn-purple" type="submit" name = "addFlight" value= {{flight["FlightNumber"]}}>Select Flight</button>
+      </form>
       </div>
     </div>
   </div>

@@ -45,10 +45,14 @@ def index():
     cruises = cursor.fetchmany(4)
     cursor.execute("SELECT * FROM Accommodation;")
     accommodations = cursor.fetchmany(4)
+    cursor.execute("SELECT * FROM Flight;")
+    flights = cursor.fetchmany(4)
+    cursor.execute("SELECT * FROM CarRental;")
+    carRentals=cursor.fetchmany(4)
     if flask_login.current_user.is_authenticated:
         user_name = getName()
-        return render_template('index.html', base_template = "base_loggedin.html", name = user_name, locations=locations, cruises=cruises, accommodations=accommodations)
-    return render_template('index.html', base_template = "base.html", locations=locations, cruises=cruises, accommodations=accommodations)
+        return render_template('index.html', base_template = "base_loggedin.html", name = user_name, locations=locations, cruises=cruises, accommodations=accommodations, flights=flights,carRentals=carRentals)
+    return render_template('index.html', base_template = "base.html", locations=locations, cruises=cruises, accommodations=accommodations, flights=flights,carRentals=carRentals)
 
 @app.route('/accommodations')
 def accommodations():
@@ -401,7 +405,7 @@ def booking():
         acc = None
         val = True
     else:
-        groupID = data[0]["GroupID"]   
+        groupID = data[0]["GroupID"]
         sql = "SELECT * FROM `Group` WHERE GroupID = " + str(groupID) + ";"
         cursor.execute(sql)
         groupInfo = cursor.fetchall()

@@ -68,6 +68,7 @@ initGroupTable = "CREATE TABLE `Group` (GroupID int auto_increment,"\
 "DestName varchar(255),"\
 "ModeOfTransport varchar(255),"\
 "Accommodation varchar(255),"\
+"TransportCost varchar(255),"\
 "primary key (GroupID),"\
 "foreign key (SourceLocation) references Location(LocationID),"\
 "foreign key (DestinationLocation) references Location(LocationID));"\
@@ -118,6 +119,7 @@ initBooksTable = "CREATE TABLE Books (GroupID int,"\
 "ForDuration varchar(255),"\
 "AccommodationType varchar(255),"\
 "Facilities varchar(255),"\
+"TotalCost varchar(255),"\
 "primary key (GroupID),"\
 "foreign key (AccommodationType, Facilities) references Accommodation(AccommodationType, Facilities));"
 

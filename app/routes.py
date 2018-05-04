@@ -3,6 +3,7 @@ from app import app
 from app.forms import LoginForm, SignupForm, GroupNavForm, CreateGroup, JoinGroup, Book
 import flask_login
 import pymysql.cursors
+import sys
 
 connection = pymysql.connect(host='localhost',
                              user='root',
@@ -179,7 +180,7 @@ def createGroup():
                 flash("Travel ID already exists. Enter another value")
                 redirect(url_for("createGroup"))
             else:
-                sql = "INSERT INTO `Group` VALUES (NULL, " + str(travelID) + ", 1, NULL, NULL, NULL, NULL, NULL, NULL);"
+                sql = "INSERT INTO `Group` VALUES (NULL, " + str(travelID) + ", 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL);"
                 cursor.execute(sql)
                 connection.commit()
                 sql = "SELECT * FROM Users WHERE Email = \'" + email + "\';"
@@ -309,12 +310,30 @@ def makeDest(ID, groupID):
     cursor.execute(sql)
     connection.commit()
 
-def addTransport(ID, groupID):
+def addTransport(ID, groupID, travelType):
+    tid =str(ID)
+    print("THE ID IS: " + tid, file=sys.stdout)
+    print(travelType, file=sys.stdout)
     sql = "SELECT TransportationType FROM Transportation WHERE TransportationID = " + str(ID) + ";"
     cursor.execute(sql)
     transport = cursor.fetchall()
     transport = transport[0]["TransportationType"]
     sql = "UPDATE `Group` SET ModeOfTransport = \'" + transport + "\' WHERE GroupID = " + str(groupID) + ";"
+    cursor.execute(sql)
+    cost = ""
+    if travelType=="Flight":
+        sql = "SELECT Fare FROM Flight WHERE FlightNumber = " + str(ID) + ";"
+        cost="Fare"
+    elif travelType=="Cruise":
+        sql = "SELECT Fare FROM Cruise WHERE CruiseNumber = " + str(ID) + ";"
+        cost ="Fare"
+    elif travelType=="CarRental":
+        sql = "SELECT Rent FROM CarRental WHERE CarRentalConfirmationID = " + str(ID) + ";"
+        cost="Rent"
+    cursor.execute(sql)
+    transportCost = cursor.fetchone()[cost]
+    print(transportCost, file=sys.stdout)
+    sql = "UPDATE `Group` SET TransportCost = \'" + str(transportCost) + "\' WHERE GroupID = " + str(groupID) + ";"
     cursor.execute(sql)
     connection.commit()
 
@@ -345,13 +364,13 @@ def addToCart():
             elif 'makeDest' in request.form:
                 makeDest(request.form['makeDest'], data[0]["GroupID"])
             elif 'addCruise' in request.form:
-                addTransport(request.form['addCruise'], data[0]["GroupID"])
+                addTransport(request.form['addCruise'], data[0]["GroupID"], "Cruise")
             elif 'addAccommodation' in request.form:
                 addAccommodation(request.form['addAccommodation'], data[0]["GroupID"], request.form['Facilities'], request.form['Rate'], request.form['Discount'])
             elif 'addCarRental' in request.form:
-                addTransport(request.form['addCarRental'], data[0]["GroupID"])
+                addTransport(request.form['addCarRental'], data[0]["GroupID"], "CarRental")
             elif 'addFlight' in request.form:
-                addTransport(request.form['addFlight'], data[0]["GroupID"])
+                addTransport(request.form['addFlight'], data[0]["GroupID"], "Flight")
     else:
         selected = False
         redirect_option = True
@@ -383,6 +402,7 @@ def booking():
     sql = "SELECT GroupID FROM PartOf WHERE PassengerID = " + str(ID) + ";"
     cursor.execute(sql)
     data = cursor.fetchall()
+    print(data,file=sys.stdout)
     if form.is_submitted():
         sql = "SELECT * FROM `Group` WHERE GroupID = \'%s\';" % (str(ID))
         cursor.execute(sql)
@@ -396,10 +416,18 @@ def booking():
             flash("You have not selected enough information to book this trip!")
         else:
             v = booking_parse_accommodation(items[0]["Accommodation"])
-            sql = "INSERT INTO Books VALUES (%s,%s,\'%s\',\'%s\');" % (str(items[0]["GroupID"]), str(form.duration.data), v[0], v[1])
+            sql = "SELECT TransportCost FROM `Group` WHERE GroupID = \'%s\';" % (str(ID))
+            cursor.execute(sql)
+            transport_cost = cursor.fetchone()["TransportCost"]
+            print(transport_cost,file=sys.stdout)
+            accommodation_cost = v[2]
+            discount = v[3]
+            total_cost = (int(form.duration.data) * int(accommodation_cost)) - int(discount) + int(transport_cost)
+            print(total_cost, file=sys.stdout)
+            sql = "INSERT INTO Books VALUES (%s,%s,\'%s\',\'%s\',%s);" % (str(items[0]["GroupID"]), str(form.duration.data), v[0], v[1], str(total_cost))
             cursor.execute(sql)
             connection.commit()
-            return redirect(url_for("booked_trips"))
+            return render_template("bookedtrips.html",base_template="base_loggedin.html",accommodation_cost=accommodation_cost, discount=discount, transport_cost=transport_cost,total_cost=total_cost)
     if len(data) == 0:
         groupInfo = ()
         acc = None

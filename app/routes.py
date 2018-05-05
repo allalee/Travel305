@@ -5,6 +5,7 @@ import flask_login
 import pymysql.cursors
 import sys
 
+#Initialize the connection to the MYSQL server
 connection = pymysql.connect(host='localhost',
                              user='root',
                              password='password',
@@ -15,6 +16,8 @@ connection = pymysql.connect(host='localhost',
 cursor = connection.cursor()
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
+
+#User class for login and signup
 class User(flask_login.UserMixin):
     def __init__(self, id):
         self.id = id
@@ -30,6 +33,7 @@ class User(flask_login.UserMixin):
 def load_user(userid):
     return User(userid)
 
+# function returns the name of the user that is logged in
 def getName():
     email = flask_login.current_user.get_id()
     cursor.execute("SELECT * FROM Users WHERE Email = \'" + email +  "\';")
@@ -37,6 +41,7 @@ def getName():
     name = data[0]["Name"]
     return name
 
+# Landing page for the Travel305 website. It shows a few of everything that the service offers.
 @app.route('/')
 @app.route('/index')
 def index():
@@ -55,6 +60,7 @@ def index():
         return render_template('index.html', base_template = "base_loggedin.html", name = user_name, locations=locations, cruises=cruises, accommodations=accommodations, flights=flights,carRentals=carRentals)
     return render_template('index.html', base_template = "base.html", locations=locations, cruises=cruises, accommodations=accommodations, flights=flights,carRentals=carRentals)
 
+# Loads all accommodations into cards in a html file.
 @app.route('/accommodations')
 def accommodations():
     cursor.execute("SELECT * FROM Accommodation;")
@@ -64,6 +70,7 @@ def accommodations():
         return render_template('accommodations.html', base_template = "base_loggedin.html", name = user_name, accommodations=accommodations)
     return render_template('accommodations.html', base_template = "base.html", accommodations=accommodations)
 
+# Loads all cruises into cards in a html file.
 @app.route('/cruises')
 def cruises():
     cursor.execute("SELECT * FROM Cruise;")
@@ -73,6 +80,7 @@ def cruises():
         return render_template('cruises.html', base_template = "base_loggedin.html", name = user_name, cruises=cruises)
     return render_template('cruises.html', base_template = "base.html", cruises=cruises)
 
+# Loads all car rentals into cards in a html file.
 @app.route('/carRentals')
 def carRentals():
     cursor.execute("SELECT * FROM CarRental;")
@@ -82,6 +90,7 @@ def carRentals():
         return render_template('carRentals.html', base_template = "base_loggedin.html", name = user_name, carRentals=carRentals)
     return render_template('cruises.html', base_template = "base.html", carRentals=carRentals)
 
+# Loads all flights into cards in a html file
 @app.route('/flights')
 def flights():
     cursor.execute("SELECT * FROM Flight;")
@@ -91,6 +100,7 @@ def flights():
         return render_template('flights.html', base_template = "base_loggedin.html", name = user_name, flights=flights)
     return render_template('flights.html', base_template = "base.html", flights=flights)
 
+# Collects login information from Flask Forms, validates the information and either fails or logs in.
 @app.route('/login',methods=['GET','POST'])
 def login():
     form = LoginForm()
@@ -111,11 +121,13 @@ def login():
             return redirect(url_for('index'))
     return render_template('login.html', title="Login", form=form, loggedin = False)
 
+# Logs user out and returns to the index page.
 @app.route('/logout')
 def logout():
     flask_login.logout_user()
     return redirect(url_for('index'))
 
+# Collects information from Flask forms and creates a new user in the users table of the database.
 @app.route('/signup',methods=["POST","GET"])
 def signup():
     form = SignupForm()
@@ -131,6 +143,7 @@ def signup():
         return render_template('signupcomplete.html')
     return render_template('signup.html', title="Signup", form=form)
 
+# Shows all available locations that can be added to a trip.
 @app.route('/locations')
 def showLocations():
     if flask_login.current_user.is_authenticated:
@@ -144,11 +157,7 @@ def showLocations():
     locations = cursor.fetchall()
     return render_template('locations.html', title="Locations", locations=locations, base_template = base_template, name = username)
 
-# @app.route('/accommodations', methods=['GET','POST'])
-# @app.route('/flights', methods=['GET','POST'])
-# @app.route('/carrentals', methods=['GET','POST'])
-# @app.route('/review', methods=['GET','POST'])
-
+# Group home page that gives user the option to create or join group.
 @app.route('/grouphome', methods=['GET','POST'])
 def groupHome():
     form = GroupNavForm()
@@ -160,6 +169,7 @@ def groupHome():
             return redirect(url_for("joinGroup"))
     return render_template('grouphome.html', name = username, form = form)
 
+# Creates a new group in the database, and by default adds the user creating the group into the group.
 @app.route('/creategroup', methods=['GET','POST'])
 def createGroup():
     form = CreateGroup()
@@ -198,6 +208,7 @@ def createGroup():
                 redirect(url_for("createGroup"))
     return render_template('creategroup.html', name = username, form = form)
 
+# User joins a group with a valid group ID.
 def joinGroupFunction(ID, travelID):
     sql = "SELECT GroupID FROM `Group` WHERE TravelID = " + str(travelID) + ";"
     cursor.execute(sql)
@@ -219,6 +230,7 @@ def joinGroupFunction(ID, travelID):
         connection.commit()
         return True
 
+# User is deleted from the specific group in the group table.
 def leaveGroupFunction(ID):
     sql = "SELECT PassengerID FROM PartOf WHERE PassengerID = " + str(ID) + ";"
     cursor.execute(sql)
@@ -243,6 +255,7 @@ def leaveGroupFunction(ID):
         connection.commit()
         return True
 
+# User can join group and a unique html file is displayed.
 @app.route('/joingroup', methods=['GET','POST'])
 def joinGroup():
     form = JoinGroup()
@@ -285,7 +298,7 @@ def joinGroup():
             return redirect(url_for('index'))
     return render_template('joingroup.html', name = username, form = form, groups = groupData, group_status = group_status, travelID = travelID)
 
-
+# User picks a source location for their groups trip and the group table is updated.
 def makeSource(ID, groupID):
     sql = "UPDATE `Group` SET SourceLocation = " + str(ID) + " WHERE GroupID = " + str(groupID) + ";"
     cursor.execute(sql)
@@ -298,6 +311,7 @@ def makeSource(ID, groupID):
     cursor.execute(sql)
     connection.commit()
 
+# User picks a destination location for their groups trip and the group table is updated.
 def makeDest(ID, groupID):
     sql = "UPDATE `Group` SET DestinationLocation = " + str(ID) + " WHERE GroupID = " + str(groupID) + ";"
     cursor.execute(sql)
@@ -310,6 +324,7 @@ def makeDest(ID, groupID):
     cursor.execute(sql)
     connection.commit()
 
+# User can add any form of transportation to their trip.
 def addTransport(ID, groupID, travelType):
     tid =str(ID)
     print("THE ID IS: " + tid, file=sys.stdout)
@@ -343,6 +358,7 @@ def addAccommodation(accommodation, groupid, facilities, rate, discount):
     cursor.execute(sql)
     connection.commit()
 
+# Handles a request to add anything to the group.
 @app.route('/addToCart', methods=['POST'])
 def addToCart():
     redirect_option = False

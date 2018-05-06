@@ -4,15 +4,16 @@
 <div class="jumbotron jumbotron-location text-center">
   <h1>View your booked trips and cost</h1>
 </div>
-<div class="container-fluid container-bg" id="login-background">
+<div class="container-fluid container-bg" style="height: 800%;" id="login-background">
   <div class="row">
     <div class="col-sm-4"></div>
     <div class="col-sm-4">
     <div class="card-body">
       <h5 class="card-title">Your receipt</h5>
-    </div>
     <ul class="list-group list-group-flush">
       <li class="list-group-item">Accommodation Cost: ${{accommodation_cost}}</li>
+      <li class="list-group-item">The accommodation is being rented for {{duration}} days.</li>
+      <li class="list-group-item">Total accommodation cost: ${{total_accommodation_cost}}</li>
       <li class="list-group-item">Discount for accommodation: ${{discount}}</li>
       <li class="list-group-item">Cost for Transportation: ${{transport_cost}}</li>
       <li class="list-group-item">Total Cost of Trip: ${{total_cost}}</li>
@@ -21,4 +22,5 @@
 </div>
     <div class="col-sm-4"></div>
   </div>
+</div>
 {% endblock %}

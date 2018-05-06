@@ -5,7 +5,7 @@
   <h1>Check out some car rentals we offer!</h1>
   <p>If you are interested in a car rentals, <a href="{{ url_for('signup')}}">sign up</a> or <a href="{{ url_for('login')}}">login</a> to plan your trip.</p>
 </div>
-<div class="container-fluid container-bg">
+<div class="container-fluid container-bg" style="height: 800%;">
 {% for carRentals_batched in carRentals|batch(4) %}
 <div class="row">
    {% for carRental in carRentals_batched %}

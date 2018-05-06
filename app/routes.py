@@ -88,7 +88,7 @@ def carRentals():
     if flask_login.current_user.is_authenticated:
         user_name = getName()
         return render_template('carRentals.html', base_template = "base_loggedin.html", name = user_name, carRentals=carRentals)
-    return render_template('cruises.html', base_template = "base.html", carRentals=carRentals)
+    return render_template('carRentals.html', base_template = "base.html", carRentals=carRentals)
 
 # Loads all flights into cards in a html file
 @app.route('/flights')
@@ -439,11 +439,13 @@ def booking():
             accommodation_cost = v[2]
             discount = v[3]
             total_cost = (int(form.duration.data) * int(accommodation_cost)) - int(discount) + int(transport_cost)
+            total_accommodation_cost = (int(form.duration.data)*int(accommodation_cost))
             print(total_cost, file=sys.stdout)
             sql = "INSERT INTO Books VALUES (%s,%s,\'%s\',\'%s\',%s);" % (str(items[0]["GroupID"]), str(form.duration.data), v[0], v[1], str(total_cost))
             cursor.execute(sql)
             connection.commit()
-            return render_template("bookedtrips.html",base_template="base_loggedin.html",accommodation_cost=accommodation_cost, discount=discount, transport_cost=transport_cost,total_cost=total_cost)
+            return render_template("bookedtrips.html",base_template="base_loggedin.html",accommodation_cost=accommodation_cost,
+                discount=discount, transport_cost=transport_cost,total_cost=total_cost,total_accommodation_cost=total_accommodation_cost, duration=str(form.duration.data), name=getName())
     if len(data) == 0:
         groupInfo = ()
         acc = None

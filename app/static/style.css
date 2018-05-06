@@ -5,6 +5,10 @@
    height: 93%;
 }
 
+html{
+  height: 100;
+}
+
 .container-bg{
      background-color: #D1D4E4;
      margin-top: 0;
@@ -100,7 +104,7 @@ fieldset[disabled] .btn-purple.active {
 }
 
 ul.groupItems{
-  text-align:center; 
+  text-align:center;
   list-style-position:inside;
   list-style-type:none;
 }
@@ -119,4 +123,3 @@ ul.groupItems{
 tr.joinGroupHeader th {
   height:50px;
 }
-

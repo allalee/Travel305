@@ -1,4 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>Congratulations! You have successfully signed up!</h1>
+<div class="jumbotron jumbotron-location text-center">
+  <h1>You now have a Travel305 account!</h1>
+  <p><a href='{{ url_for('login')}}'>Login</a> to start planning your trip or look below for a description of how our service works.</p>
+</div>
+<div class="container-fluid container-bg" style="height: 800%;" id="login-background">
+  <div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+      <div class="card card-padding card-custom-size">
+        <div class="card-body">
+          <h3 class="card-title">What we offer</h3>
+          <p class="card-text">With an account you can browse all of our locations that we offer travel to.</p>
+          <p class="card-text">You can browse modes of travel such as cruises, flights and car rentals.</p>
+          <p class="card-text">You can find a place to stay in your location of choice.</p>
+          <p class="card-text">Travel305 is like your favorite social media website, you can invite your friends and coworkers to your trip!</p>
+          <p class="card-text">Once all of the travel options are added, an itemized list of costs for the trip are displayed in a receipt.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4 my-auto"></div>
+  </div>
+</div>
 {% endblock %}

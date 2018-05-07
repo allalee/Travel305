@@ -1,4 +1,5 @@
 {% extends base_template %}
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block content %}
 <div class="jumbotron jumbotron-location text-center">
@@ -6,10 +7,6 @@
   <p>To add items to your cart, search for items on our other pages and add them to the cart. Make sure you are in a group first!</p>
 </div>
 <div>
-  <form action="" method="post">
-  <p>{{form.duration}}Enter Duration (In Days)</p>
-  <p>{{form.submit}}</p>
-</form>
 </div>
 <div class = "joinGroupItems joinGroupTable">
   <table>
@@ -56,4 +53,8 @@
     {% endif %}
   </table>
 </div>
+<form action="" method="post">
+<p>{{form.duration}}Enter Duration (In Days)</p>
+<p><p>{{wtf.form_field(form.submit,class="btn btn-purple")}}</p></p>
+</form>
 {% endblock %}

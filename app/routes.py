@@ -110,10 +110,10 @@ def login():
         cursor.execute("SELECT * FROM Users WHERE Email = \'" + email +  "\';")
         data = cursor.fetchall()
         if(len(data) == 0):
-            flash("Invalid email or password")
+            flash("Invalid email or password", 'danger')
             return redirect(url_for('login'))
         if(data[0]["Password"] != password):
-            flash("Invalid email or password")
+            flash("Invalid email or password", 'danger')
             return redirect(url_for('login'))
         if(data[0]["Email"] == email and data[0]["Password"] == password):
             user = User(data[0]["Email"])
@@ -140,6 +140,7 @@ def signup():
         sql="INSERT INTO Users VALUES (NULL,"+"\'"+email+"\',"+"\'"+name+"\',"+"\'"+password+"\',"+'\''+gender+'\','+'\''+dob+'\')'
         cursor.execute(sql)
         connection.commit()
+        flash("You have successfully signed up! Log in to access our service!", 'success')
         return render_template('signupcomplete.html')
     return render_template('signup.html', title="Signup", form=form)
 
@@ -181,13 +182,13 @@ def createGroup():
         cursor.execute("SELECT * FROM Users WHERE Email = \'" + email + "\' AND Name = \'" + name + "\';")
         data = cursor.fetchall()
         if len(data) == 0:
-            flash("Account does not exist")
+            flash("Account does not exist", 'danger')
             redirect(url_for("createGroup"))
         else:
             cursor.execute("SELECT * FROM `Group` WHERE TravelID = " + str(travelID) + ";")
             data = cursor.fetchall()
             if len(data) != 0:
-                flash("Travel ID already exists. Enter another value")
+                flash("Travel ID already exists. Enter another value", 'danger')
                 redirect(url_for("createGroup"))
             else:
                 sql = "INSERT INTO `Group` VALUES (NULL, " + str(travelID) + ", 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL);"
@@ -204,7 +205,7 @@ def createGroup():
                 sql = "INSERT INTO PartOf VALUES (" + str(PassengerID) + ", " + str(groupID) + ");"
                 cursor.execute(sql)
                 connection.commit()
-                flash("Group has been created under ID: " + str(travelID))
+                flash("Group has been created under ID: " + str(travelID),'success')
                 redirect(url_for("createGroup"))
     return render_template('creategroup.html', name = username, form = form)
 
@@ -214,7 +215,7 @@ def joinGroupFunction(ID, travelID):
     cursor.execute(sql)
     data = cursor.fetchall()
     if len(data) == 0:
-        flash("That is not a valid travel ID")
+        flash("That is not a valid travel ID",'danger')
         return False
     else:
         sql = "INSERT INTO PartOf VALUES (" + str(ID) + ", " + str(data[0]["GroupID"]) + ");"
@@ -236,7 +237,7 @@ def leaveGroupFunction(ID):
     cursor.execute(sql)
     data = cursor.fetchall()
     if len(data) == 0:
-        flash("You are not in a group!")
+        flash("You are not in a group!", 'danger')
         return False
     else:
         sql = "SELECT GroupID FROM PartOf WHERE PassengerID = " + str(ID) + ";"
@@ -285,10 +286,10 @@ def joinGroup():
         if 'submit' in request.form:
             desired_travel_id = form.travelID.data
             if travelID != None:
-                flash("You are already in a group! Leave your group first.")
+                flash("You are already in a group! Leave your group first.", 'danger')
                 redirect_option = False
             elif desired_travel_id == None:
-                flash("That is not a valid travel ID")
+                flash("That is not a valid travel ID", 'danger')
                 redirect_option = False
             else:
                 redirect_option = joinGroupFunction(ID, desired_travel_id)
@@ -429,7 +430,7 @@ def booking():
                 f = True
                 break
         if f or form.duration.data == None:
-            flash("You have not selected enough information to book this trip!")
+            flash("You have not selected enough information to book this trip!", 'danger')
         else:
             v = booking_parse_accommodation(items[0]["Accommodation"])
             sql = "SELECT TransportCost FROM `Group` WHERE GroupID = \'%s\';" % (str(ID))

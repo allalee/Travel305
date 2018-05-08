@@ -419,6 +419,9 @@ def booking():
     sql = "SELECT GroupID FROM PartOf WHERE PassengerID = " + str(ID) + ";"
     cursor.execute(sql)
     data = cursor.fetchall()
+    if data == ():
+        flash("You must be part of a group first!", 'danger')
+        return redirect(url_for("groupHome"))
     ID = data[0]["GroupID"]
     if form.is_submitted():
         sql = "SELECT * FROM `Group` WHERE GroupID = \'%s\';" % (str(ID))
@@ -463,4 +466,35 @@ def booking():
 @app.route('/bookedtrips', methods=['GET','POST'])
 def booked_trips():
     #MUST CHECK IF WE BOOKED A TRIP AND DISPLAY IN TABLE
-    return render_template('bookedtrips.html', base_template = "base_loggedin.html")
+    email = flask_login.current_user.get_id()
+    sql = "SELECT ID FROM Users WHERE Email = \'" + email + "\';"
+    cursor.execute(sql)
+    data = cursor.fetchall()
+    ID = data[0]["ID"]
+    sql = "SELECT GroupID FROM PartOf WHERE PassengerID = " + str(ID) + ";"
+    cursor.execute(sql)
+    data = cursor.fetchall()
+    if data == ():
+        return render_template('bookedtrips.html', base_template = "base_loggedin.html")
+    ID = data[0]["GroupID"]
+    sql = "SELECT * FROM `Group` WHERE GroupID = \'%s\';" % (str(ID))
+    cursor.execute(sql)
+    items = cursor.fetchall()
+    sql = "SELECT * FROM Books WHERE GroupID = \'%s\';" % (str(ID))
+    cursor.execute(sql)
+    r = cursor.fetchall()
+    if items == () or r == ():
+        return render_template('bookedtrips.html', base_template = "base_loggedin.html")
+    else:
+        v = booking_parse_accommodation(items[0]["Accommodation"])
+        sql = "SELECT TransportCost FROM `Group` WHERE GroupID = \'%s\';" % (str(ID))
+        cursor.execute(sql)
+        transport_cost = cursor.fetchone()["TransportCost"]
+        print(transport_cost,file=sys.stdout)
+        accommodation_cost = v[2]
+        discount = v[3]
+        total_cost = (int(r[0]["ForDuration"]) * int(accommodation_cost)) - int(discount) + int(transport_cost)
+        total_accommodation_cost = (int(r[0]["ForDuration"])*int(accommodation_cost))
+        print(total_cost, file=sys.stdout)
+        return render_template("bookedtrips.html",base_template="base_loggedin.html",accommodation_cost=accommodation_cost,
+            discount=discount, transport_cost=transport_cost,total_cost=total_cost,total_accommodation_cost=total_accommodation_cost, duration=str(r[0]["ForDuration"]), name=getName())

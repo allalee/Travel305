@@ -419,7 +419,7 @@ def booking():
     sql = "SELECT GroupID FROM PartOf WHERE PassengerID = " + str(ID) + ";"
     cursor.execute(sql)
     data = cursor.fetchall()
-    print(data,file=sys.stdout)
+    ID = data[0]["GroupID"]
     if form.is_submitted():
         sql = "SELECT * FROM `Group` WHERE GroupID = \'%s\';" % (str(ID))
         cursor.execute(sql)
